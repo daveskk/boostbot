@@ -214,7 +214,9 @@ document.getElementById('cmdTitle').innerText='📜 Commands';
 document.getElementById('modalTitle').innerText='Owner servers';
 document.getElementById('closeModalBtn').innerText='Close';
 
-document.getElementById('privacy').innerHTML = `
+const privacy = document.getElementById('privacy');
+privacy.innerHTML = '';
+privacy.innerHTML = `
 <h2>🔐 Privacy Policy</h2>
 <p><strong>Last updated:</strong> 2026</p>
 <p>This bot only collects the necessary data for its functionality.</p>
@@ -233,8 +235,9 @@ document.getElementById('privacy').innerHTML = `
 <h3>Contact</h3>
 <p>Contact the developer for any questions.</p>
 `;
-
-document.getElementById('terms').innerHTML = `
+const terms = document.getElementById('terms');
+terms.innerHTML = '';
+terms.innerHTML = `
 <h2>📜 Terms of Service</h2>
 <p><strong>Last updated:</strong> 2026</p>
 <h3>Usage</h3>
