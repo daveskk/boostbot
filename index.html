@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boost Bot • Ultimate</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#020617;color:#e2e8f0;overflow-x:hidden}
+
+body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(270deg,#0ea5e9,#6366f1,#22c55e);background-size:600% 600%;animation:gradientMove 15s ease infinite;z-index:-2;opacity:.15}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+canvas{position:fixed;top:0;left:0;z-index:-1}
+
+header{text-align:center;padding:60px 20px}
+header h1{font-size:3rem;color:#38bdf8}
+header p{color:#94a3b8;margin-top:10px}
+
+nav{display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap}
+nav a{cursor:pointer;color:#cbd5f5;text-decoration:none}
+nav a:hover{color:#38bdf8}
+
+.container{max-width:1100px;margin:30px auto;padding:30px;background:#020617cc;border-radius:18px;backdrop-filter:blur(12px);box-shadow:0 0 60px rgba(56,189,248,.15)}
+.hidden{display:none !important}
+
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;background:#38bdf8;color:#020617;text-decoration:none;font-weight:bold;margin-top:15px;transition:.3s}
+.btn:hover{transform:scale(1.08)}
+.btn.secondary{background:#1e293b;color:#e2e8f0}
+
+.buttons{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}
+footer{text-align:center;padding:30px;color:#64748b}
+
+.toggle,.lang{position:fixed;top:15px;padding:10px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.toggle{right:15px;background:#38bdf8}
+.lang{right:80px;background:#22c55e}
+
+/* modal FIXED */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;display:flex;justify-content:center;align-items:center;z-index:10}
+.modal-content{background:#020617;padding:25px;border-radius:14px;text-align:center;min-width:280px}
+
+.close-btn{margin-top:15px}
+
+.light{background:#f1f5f9;color:#020617}
+.light .container{background:#ffffff}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+<button class="toggle" onclick="toggleTheme()">🌙</button>
+<button class="lang" onclick="toggleLang()" id="langBtn">PT</button>
+
+<header>
+<h1>💎 Boost Bot</h1>
+<p id="subtitle"></p>
+
+<nav>
+<a onclick="showPage('home')" id="navHome"></a>
+<a onclick="showPage('commands')" id="navCmd"></a>
+<a onclick="showPage('privacy')" id="navPriv"></a>
+<a onclick="showPage('terms')" id="navTerms"></a>
+</nav>
+</header>
+
+<div class="container" id="home">
+<h2 id="aboutTitle"></h2>
+<p id="aboutText"></p>
+
+<div class="buttons">
+<a href="https://discord.com/oauth2/authorize?client_id=1484280938698641649" class="btn" id="inviteBtn"></a>
+<button class="btn secondary" onclick="openModal()" id="serversBtn"></button>
+</div>
+
+<h3 id="devTitle"></h3>
+<p>daveskk</p>
+<button class="btn" onclick="copyEmail()" id="emailBtn"></button>
+</div>
+
+<!-- MODAL (agora começa escondido) -->
+<div class="modal hidden" id="serverModal">
+<div class="modal-content">
+<h3 id="modalTitle"></h3>
+<br>
+<a href="https://discord.gg/xjn9EfUpGz" class="btn">Servidor 1</a><br>
+<a href="https://discord.gg/Ny62E2KHSs" class="btn secondary">Servidor 2</a><br><br>
+<button class="btn close-btn" onclick="closeModal()" id="closeModalBtn">Fechar</button>
+</div>
+</div>
+
+<div class="container hidden" id="commands">
+<h2 id="cmdTitle"></h2>
+<ul>
+<li>&setup</li>
+<li>&stats</li>
+</ul>
+</div>
+
+<div class="container hidden" id="privacy">
+<h2>🔐 Política de Privacidade</h2>
+<p><strong>Última atualização:</strong> 2026</p>
+<p>Este bot coleta apenas as informações necessárias para seu funcionamento.</p>
+<h3>Dados coletados</h3>
+<ul>
+<li>ID de servidores</li>
+<li>ID de cargos configurados</li>
+<li>Status de boost de membros</li>
+</ul>
+<h3>Uso dos dados</h3>
+<p>Os dados são usados exclusivamente para funcionamento do bot, como gerenciamento de cargos e estatísticas.</p>
+<h3>Compartilhamento</h3>
+<p>Nenhum dado é vendido ou compartilhado com terceiros.</p>
+<h3>Segurança</h3>
+<p>Os dados são armazenados de forma simples e segura.</p>
+<h3>Contato</h3>
+<p>Entre em contato com o desenvolvedor para dúvidas.</p>
+</div>
+
+<div class="container hidden" id="terms">
+<h2>📜 Termos de Serviço</h2>
+<p><strong>Última atualização:</strong> 2026</p>
+<h3>Uso</h3>
+<p>O bot é fornecido "como está", sem garantias.</p>
+<h3>Responsabilidade</h3>
+<p>O desenvolvedor não se responsabiliza por danos, mau uso ou problemas causados pelo bot.</p>
+<h3>Uso proibido</h3>
+<ul>
+<li>Atividades ilegais</li>
+<li>Exploração do bot</li>
+<li>Abuso da plataforma Discord</li>
+</ul>
+<h3>Alterações</h3>
+<p>O bot pode ser modificado ou descontinuado a qualquer momento.</p>
+</div>
+
+<footer>© 2026 Boost Bot • daveskk</footer>
+
+<script>
+let lang='pt';
+function toggleLang(){lang=lang==='pt'?'en':'pt';applyLang();}
+
+function applyLang(){
+if(lang==='pt'){
+document.getElementById('langBtn').innerText='PT';
+document.getElementById('subtitle').innerText='Sistema definitivo de gerenciamento de boosts';
+document.getElementById('navHome').innerText='Início';
+document.getElementById('navCmd').innerText='Comandos';
+document.getElementById('navPriv').innerText='Privacidade';
+document.getElementById('navTerms').innerText='Termos';
+document.getElementById('aboutTitle').innerText='🚀 Sobre o Bot';
+document.getElementById('aboutText').innerText='Bot completo para gerenciar boosts automaticamente com cargos e estatísticas.';
+document.getElementById('inviteBtn').innerText='➕ Adicionar Bot';
+document.getElementById('serversBtn').innerText='🌐 Servidores do dono';
+document.getElementById('devTitle').innerText='👨‍💻 Desenvolvedor';
+document.getElementById('emailBtn').innerText='📧 Copiar Email';
+document.getElementById('cmdTitle').innerText='📜 Comandos';
+document.getElementById('modalTitle').innerText='Servidores do dono';
+document.getElementById('closeModalBtn').innerText='Fechar';
+
+document.getElementById('privacy').innerHTML = `
+<h2>🔐 Política de Privacidade</h2>
+<p><strong>Última atualização:</strong> 2026</p>
+<p>Este bot coleta apenas as informações necessárias para seu funcionamento.</p>
+<h3>Dados coletados</h3>
+<ul>
+<li>ID de servidores</li>
+<li>ID de cargos configurados</li>
+<li>Status de boost de membros</li>
+</ul>
+<h3>Uso dos dados</h3>
+<p>Os dados são usados exclusivamente para funcionamento do bot, como gerenciamento de cargos e estatísticas.</p>
+<h3>Compartilhamento</h3>
+<p>Nenhum dado é vendido ou compartilhado com terceiros.</p>
+<h3>Segurança</h3>
+<p>Os dados são armazenados de forma simples e segura.</p>
+<h3>Contato</h3>
+<p>Entre em contato com o desenvolvedor para dúvidas.</p>
+`;
+
+document.getElementById('terms').innerHTML = `
+<h2>📜 Termos de Serviço</h2>
+<p><strong>Última atualização:</strong> 2026</p>
+<h3>Uso</h3>
+<p>O bot é fornecido "como está", sem garantias.</p>
+<h3>Responsabilidade</h3>
+<p>O desenvolvedor não se responsabiliza por danos, mau uso ou problemas causados pelo bot.</p>
+<h3>Uso proibido</h3>
+<ul>
+<li>Atividades ilegais</li>
+<li>Exploração do bot</li>
+<li>Abuso da plataforma Discord</li>
+</ul>
+<h3>Alterações</h3>
+<p>O bot pode ser modificado ou descontinuado a qualquer momento.</p>
+`;
+
+}else{
+document.getElementById('langBtn').innerText='EN';
+document.getElementById('subtitle').innerText='Ultimate boost management system';
+document.getElementById('navHome').innerText='Home';
+document.getElementById('navCmd').innerText='Commands';
+document.getElementById('navPriv').innerText='Privacy';
+document.getElementById('navTerms').innerText='Terms';
+document.getElementById('aboutTitle').innerText='🚀 About the Bot';
+document.getElementById('aboutText').innerText='Complete bot to automatically manage boosts with roles and stats.';
+document.getElementById('inviteBtn').innerText='➕ Add Bot';
+document.getElementById('serversBtn').innerText='🌐 Owner Servers';
+document.getElementById('devTitle').innerText='👨‍💻 Developer';
+document.getElementById('emailBtn').innerText='📧 Copy Email';
+document.getElementById('cmdTitle').innerText='📜 Commands';
+document.getElementById('modalTitle').innerText='Owner servers';
+document.getElementById('closeModalBtn').innerText='Close';
+
+document.getElementById('privacy').innerHTML = `
+<h2>🔐 Privacy Policy</h2>
+<p><strong>Last updated:</strong> 2026</p>
+<p>This bot only collects the necessary data for its functionality.</p>
+<h3>Data collected</h3>
+<ul>
+<li>Server IDs</li>
+<li>Configured role IDs</li>
+<li>Member boost status</li>
+</ul>
+<h3>Data usage</h3>
+<p>The data is used exclusively for bot functionality, such as role management and statistics.</p>
+<h3>Sharing</h3>
+<p>No data is sold or shared with third parties.</p>
+<h3>Security</h3>
+<p>Data is stored in a simple and secure way.</p>
+<h3>Contact</h3>
+<p>Contact the developer for any questions.</p>
+`;
+
+document.getElementById('terms').innerHTML = `
+<h2>📜 Terms of Service</h2>
+<p><strong>Last updated:</strong> 2026</p>
+<h3>Usage</h3>
+<p>The bot is provided "as is", without guarantees.</p>
+<h3>Responsibility</h3>
+<p>The developer is not responsible for damages, misuse, or issues caused by the bot.</p>
+<h3>Prohibited use</h3>
+<ul>
+<li>Illegal activities</li>
+<li>Bot exploitation</li>
+<li>Abuse of the Discord platform</li>
+</ul>
+<h3>Changes</h3>
+<p>The bot may be modified or discontinued at any time.</p>
+`;
+}
+}
+
+applyLang();
+
+function showPage(p){['home','commands','privacy','terms'].forEach(id=>document.getElementById(id).classList.add('hidden'));document.getElementById(p).classList.remove('hidden')}
+function copyEmail(){navigator.clipboard.writeText('daveskk.contato@gmail.com');alert(lang==='pt'?'Email copiado!':'Email copied!')}
+function toggleTheme(){document.body.classList.toggle('light')}
+
+function openModal(){document.getElementById('serverModal').classList.remove('hidden')}
+function closeModal(){document.getElementById('serverModal').classList.add('hidden')}
+
+// particles
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+let particles=[];
+for(let i=0;i<80;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:Math.random()-0.5,dy:Math.random()-0.5})}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.x+=p.dx;p.y+=p.dy;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='#38bdf8';ctx.fill()});requestAnimationFrame(draw)}
+draw();
+</script>
+
+</body>
+</html>
